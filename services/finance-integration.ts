@@ -56,6 +56,7 @@ export async function recordRevenue(transaction: Omit<RevenueTransaction, "id" |
     revalidatePath("/bank-book")
     revalidatePath("/accounting-entries")
     revalidatePath("/receipt-management")
+    
 
     return { success: true, transaction: newTransaction }
   } catch (error) {
