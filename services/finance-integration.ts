@@ -1,6 +1,6 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
+// import { revalidatePath } from "next/cache"
 
 // Types for revenue sources
 export type RevenueSource =
@@ -52,10 +52,10 @@ export async function recordRevenue(transaction: Omit<RevenueTransaction, "id" |
     }
 
     // Revalidate relevant paths
-    revalidatePath("/cash-book")
-    revalidatePath("/bank-book")
-    revalidatePath("/accounting-entries")
-    revalidatePath("/receipt-management")
+    // revalidatePath("/cash-book")
+    // revalidatePath("/bank-book")
+    // revalidatePath("/accounting-entries")
+    // revalidatePath("/receipt-management")
     
 
     return { success: true, transaction: newTransaction }
@@ -94,7 +94,7 @@ export async function reconcileTransaction(transactionId: string) {
     console.log(`Reconciled transaction ${transactionId}`)
 
     // Revalidate relevant paths
-    revalidatePath("/reconciliation")
+    // revalidatePath("/reconciliation")
 
     return { success: true }
   } catch (error) {
