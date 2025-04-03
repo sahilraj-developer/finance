@@ -119,9 +119,9 @@ export default function ProjectApiList() {
     api_updateRegisterofAdvancefortheyearById: `${baseUrl}/api/finance/register-of-advance-for-year/updatecheque`,
     api_deleteRegisterofAdvancefortheyearById: `${baseUrl}/api/finance/register-of-advance-for-year/delete`,
     api_forwardRegisterofAdvancefortheyearById: `${baseUrl}/api/finance/register-of-advance-for-year/update-status`,
+    
 
-
-    ///////receipt register apis GEN-9 //
+    //receipt register apis GEN-9 //
     
 
     //Register of Permanent Advance

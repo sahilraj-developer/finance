@@ -35,6 +35,7 @@ import TradeLicensePayment from "./pages/trade-license/payment/page";
 import VoucherApproval from "./pages/voucher-approval/page";
 import VoucherEntry from "./pages/voucher-entry/page";
 import WaterTaxPage from "./pages/water-tax/page";
+import RevenueDashboard from "./pages/revenue-dashboard/page";
 
 export default function App() {
   return (
@@ -62,6 +63,7 @@ export default function App() {
             <Route path="/receipt-management" element={ <ReceiptManagement />  }  />
             <Route path="/reconciliation" element={ <Reconciliation />  }  />
             <Route path="/reconciliation" element={ <Reconciliation />  }  />
+            <Route path="/revenue-dashboard" element={ <RevenueDashboard />  }  />
             <Route path="/trade-license" element={ <TradeLicensePage />  }  />
             <Route path="/trade-license/payment" element={ <TradeLicensePayment />  }  />
             <Route path="/voucher-approval" element={ <VoucherApproval />  }  />
