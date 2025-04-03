@@ -74,6 +74,24 @@ const waterTaxRecords = [
   },
 ]
 
+// api
+// /getall
+
+// /post-data -
+
+// {
+//   "connectionId": "string",      
+//   "owner": "string",             
+//   "address": "string",           
+//   "connectionType": "string",    
+//   "meterNo": "string",           
+//   "annualTax": "number",        
+//   "status": "string",
+//   "dueDate": "string",           
+//   "paidDate": "string"           
+// }
+
+
 export default function WaterTaxPage() {
   const router = useNavigate()
   const [searchTerm, setSearchTerm] = useState("")

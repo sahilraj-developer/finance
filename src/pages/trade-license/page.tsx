@@ -75,6 +75,27 @@ const tradeLicenseRecords = [
   },
 ]
 
+// api
+// /getall
+
+// /post-data -
+
+// {
+//   "licenseId": "string",       
+//   "businessName": "string",    
+//   "owner": "string",           
+//   "address": "string",         
+//   "category": "string",        
+//   "annualFee": "number",       
+//   "status": "string",          
+//   "expiryDate": "string",      
+//   "renewalStatus": "string"    
+// }
+
+
+
+
+
 export default function TradeLicensePage() {
   const router = useNavigate()
   const [searchTerm, setSearchTerm] = useState("")

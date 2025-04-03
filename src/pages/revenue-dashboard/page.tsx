@@ -138,6 +138,27 @@ const sourceDisplayNames: Record<RevenueSource, string> = {
   "user-charges": "User Charges",
 };
 
+// api
+// /getall
+
+// /post-data -
+
+// {
+//   "source": "string",           
+//   "amount": "number",            
+//   "transactionDate": "string",   
+//   "receiptNumber": "string",     
+//   "paidBy": "string",
+//   "collectedBy": "string",       
+//   "paymentMode": "string",       
+//   "accountHead": "string",       
+//   "fundCode": "string",          
+//   "departmentCode": "string",   
+//   "functionCode": "string",      
+//   "status": "string"            
+// }
+
+
 export default function RevenueDashboard() {
   const [period, setPeriod] = useState("current-month");
   const [transactions, setTransactions] = useState<RevenueTransaction[]>([]);
