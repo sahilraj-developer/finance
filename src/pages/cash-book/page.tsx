@@ -66,6 +66,35 @@ const creditEntries = [
   },
 ]
 
+// const handleFilterClick = () => {
+//   setLoading(true);
+//   AxiosInterceptors.post(
+//     `${api_getCashbookDetails}?code=${selectedMajor}${selectedMinor}${selectedDetail}&to=${toDate}&from=${fromDate}`,
+//     {},
+//     ApiHeader()
+//   )
+//     .then(function (response) {
+//       setLoading(false);
+//       setCashbookPaymentData(response?.data?.data?.payments);
+//       setCashbookReceptData(response?.data?.data?.receipts);
+//     })
+//     .catch(function (error) {
+//       setLoading(false);
+//       toast.error("Something went wrong");
+//     });
+// };
+
+// // ===========================================================================
+
+// const {
+//   api_getCashbookDetails,
+//   api_postCashbookDetails,
+//   api_updateCashbookDetails,
+//   api_deleteCashbookDetails,
+//   api_getRejectCashbookDetails,
+//   api_bankAccountGet,
+// } = ProjectApiList();
+
 export default function CashBook() {
   const [date, setDate] = useState<Date | undefined>(new Date())
 
@@ -218,7 +247,7 @@ export default function CashBook() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {creditEntries.map((entry) => (
+                {creditEntries.map((entry:any) => (
                   <TableRow key={entry.id}>
                     <TableCell>{new Date(entry.date).toLocaleDateString("en-IN")}</TableCell>
                     <TableCell>{entry.voucherNo}</TableCell>

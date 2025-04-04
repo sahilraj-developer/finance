@@ -70,6 +70,25 @@ const propertyTaxRecords = [
   },
 ]
 
+
+// api
+// /getall
+
+// /post-data -
+
+// {
+//   "propertyId": "string",        
+//   "owner": "string",            
+//   "address": "string",           
+//   "assessedValue": "number",     
+//   "annualTax": "number",         
+//   "status": "string",           
+//   "dueDate": "string",           
+//   "paidDate": "string"           
+// }
+
+
+
 export default function PropertyTaxPage() {
   const router = useNavigate()
   const [searchTerm, setSearchTerm] = useState("")

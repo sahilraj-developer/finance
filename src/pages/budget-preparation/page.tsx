@@ -122,6 +122,18 @@ const expenditureItems = [
   },
 ]
 
+
+
+// {
+//   "code": "string",         
+//   "name": "string",        
+//   "estimated": "number",   
+//   "actual": "number",      
+//   "remarks": "string"       
+// }
+
+
+
 export default function BudgetPreparation() {
   const [selectedFund, setSelectedFund] = useState("")
   const [selectedDepartment, setSelectedDepartment] = useState("")
