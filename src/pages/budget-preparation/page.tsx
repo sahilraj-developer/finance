@@ -122,7 +122,9 @@ const expenditureItems = [
   },
 ]
 
+// getall api
 
+// post data
 
 // {
 //   "code": "string",         
