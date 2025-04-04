@@ -71,6 +71,19 @@ const auditTrail = [
   },
 ]
 
+// getall api
+
+// post data
+
+// {
+//   "action": "string",      
+//   "user": "string",        
+//   "role": "string",        
+//   "date": "string",        
+//   "comments": "string"     
+// }
+
+
 export default function BudgetSanction() {
   const [comments, setComments] = useState("")
 

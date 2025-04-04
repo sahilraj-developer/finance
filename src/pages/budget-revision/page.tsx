@@ -88,6 +88,21 @@ const expenditureItems = [
   },
 ]
 
+
+// getall api
+
+// post data
+
+
+// {
+//   "code": "string",           
+//   "name": "string",           
+//   "original": "number",       
+//   "revised": "number",        
+//   "justification": "string"   
+// }
+
+
 export default function BudgetRevision() {
   const [revisionReason, setRevisionReason] = useState("")
 
