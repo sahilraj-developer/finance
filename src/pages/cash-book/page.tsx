@@ -15,6 +15,9 @@ import { Badge } from "@/components/ui/badge"
 import { Link } from "react-router-dom"
 
 
+
+
+
 // Sample data for demonstration
 const debitEntries = [
   {
@@ -96,6 +99,24 @@ const creditEntries = [
 // } = ProjectApiList();
 
 export default function CashBook() {
+
+
+
+  // get
+  // /api/cashbook
+
+
+  // post
+   // /api/dashboard-data/
+
+
+  //  date: "2025-04-06",
+  //     voucherNo: "R006",
+  //     description: "New Tax Collection",
+  //     amount: 10000,
+  //     type: "Tax",
+
+
   const [date, setDate] = useState<Date | undefined>(new Date())
 
   // Calculate totals

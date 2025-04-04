@@ -27,6 +27,221 @@ const budgetHeads = [
 ]
 
 export default function VoucherEntry() {
+
+
+  // post
+  //   /api/payment-voucher-entry
+
+
+  // {
+  //   "paymentVoucher": {
+  //     "voucherNo": "PV/2023-24/0001",
+  //     "date": "2023-04-04",
+  //     "paymentMode": "bank-transfer",
+  //     "payeeName": "John Doe",
+  //     "payeeBankAccount": "1234567890",
+  //     "budgetHead": "Salaries",
+  //     "description": "Payment for employee salaries",
+  //     "amount": 50000.00,
+  //     "attachments": [
+  //       {
+  //         "fileName": "invoice1.pdf",
+  //         "fileUrl": "https://example.com/invoice1.pdf"
+  //       },
+  //       {
+  //         "fileName": "invoice2.pdf",
+  //         "fileUrl": "https://example.com/invoice2.pdf"
+  //       }
+  //     ],
+  //     "tdsApplicable": "yes",
+  //     "tdsPercentage": "2",
+  //     "pan": "ABCDE1234F"
+  //   },
+  //   "workflowStatus": [
+  //     {
+  //       "status": "Created",
+  //       "person": "Accountant",
+  //       "statusDate": "2023-04-01",
+  //       "statusColor": "bg-primary",
+  //       "statusIcon": "check"
+  //     },
+  //     {
+  //       "status": "Verified",
+  //       "person": "Accounts Officer",
+  //       "statusDate": "2023-04-02",
+  //       "statusColor": "bg-muted",
+  //       "statusIcon": "2"
+  //     },
+  //     {
+  //       "status": "Approved",
+  //       "person": "Executive Officer",
+  //       "statusDate": "2023-04-03",
+  //       "statusColor": "bg-muted",
+  //       "statusIcon": "3"
+  //     },
+  //     {
+  //       "status": "Paid",
+  //       "person": "Cashier",
+  //       "statusDate": "2023-04-04",
+  //       "statusColor": "bg-muted",
+  //       "statusIcon": "4"
+  //     }
+  //   ]
+  // }
+  
+
+// post
+  // receipt voucher 
+
+
+  // {
+  //   "receiptVoucher": {
+  //     "receiptNo": "RV/2023-24/0001",
+  //     "receiptDate": "2023-04-04",
+  //     "receiptMode": "bank-transfer",
+  //     "payerName": "Jane Doe",
+  //     "payerContact": "9876543210",
+  //     "purpose": "Property Tax",
+  //     "description": "Payment for property tax of 2023-24",
+  //     "amount": 10000.00
+  //   },
+  //   "workflowStatus": [
+  //     {
+  //       "status": "Created",
+  //       "person": "Accountant",
+  //       "statusDate": "2023-04-01",
+  //       "statusColor": "bg-primary",
+  //       "statusIcon": "check"
+  //     },
+  //     {
+  //       "status": "Verified",
+  //       "person": "Accounts Officer",
+  //       "statusDate": "2023-04-02",
+  //       "statusColor": "bg-muted",
+  //       "statusIcon": "2"
+  //     },
+  //     {
+  //       "status": "Approved",
+  //       "person": "Executive Officer",
+  //       "statusDate": "2023-04-03",
+  //       "statusColor": "bg-muted",
+  //       "statusIcon": "3"
+  //     },
+  //     {
+  //       "status": "Paid",
+  //       "person": "Cashier",
+  //       "statusDate": "2023-04-04",
+  //       "statusColor": "bg-muted",
+  //       "statusIcon": "4"
+  //     }
+  //   ]
+  // }
+  
+
+
+// journal voucher 
+
+
+// {
+//   "journalVoucher": {
+//     "status": "Form Placeholder",
+//     "message": "Journal Voucher form will be displayed here"
+//   },
+//   "workflowStatus": [
+//     {
+//       "status": "Created",
+//       "person": "Accountant",
+//       "statusDate": "2023-04-01",
+//       "statusColor": "bg-primary",
+//       "statusIcon": "check"
+//     },
+//     {
+//       "status": "Verified",
+//       "person": "Accounts Officer",
+//       "statusDate": "2023-04-02",
+//       "statusColor": "bg-muted",
+//       "statusIcon": "2"
+//     },
+//     {
+//       "status": "Approved",
+//       "person": "Executive Officer",
+//       "statusDate": "2023-04-03",
+//       "statusColor": "bg-muted",
+//       "statusIcon": "3"
+//     },
+//     {
+//       "status": "Paid",
+//       "person": "Cashier",
+//       "statusDate": "2023-04-04",
+//       "statusColor": "bg-muted",
+//       "statusIcon": "4"
+//     }
+//   ]
+// }
+
+
+
+
+// contra voucher 
+
+
+// {
+//   "contraVoucher": {
+//     "status": "Form Placeholder",
+//     "message": "Contra Voucher form will be displayed here"
+//   },
+//   "workflowStatus": [
+//     {
+//       "status": "Created",
+//       "person": "Accountant",
+//       "statusDate": "2023-04-01",
+//       "statusColor": "bg-primary",
+//       "statusIcon": "check"
+//     },
+//     {
+//       "status": "Verified",
+//       "person": "Accounts Officer",
+//       "statusDate": "2023-04-02",
+//       "statusColor": "bg-muted",
+//       "statusIcon": "2"
+//     },
+//     {
+//       "status": "Approved",
+//       "person": "Executive Officer",
+//       "statusDate": "2023-04-03",
+//       "statusColor": "bg-muted",
+//       "statusIcon": "3"
+//     },
+//     {
+//       "status": "Paid",
+//       "person": "Cashier",
+//       "statusDate": "2023-04-04",
+//       "statusColor": "bg-muted",
+//       "statusIcon": "4"
+//     }
+//   ]
+// }
+
+
+
+
+
+// get 
+// /api/past-vouchers
+
+
+// [
+//   {
+//     "voucherNo": "PV/2023-24/0001",
+//     "date": "01/04/2023",
+//     "type": "Payment",
+//     "description": "Vendor Payment - ABC Suppliers",
+//     "amount": 25000.00,
+//     "status": "Approved"
+//   }
+// ]
+
+
   const [date, setDate] = useState<Date | undefined>(new Date())
   const [voucherType, setVoucherType] = useState("payment")
   const [open, setOpen] = useState(false)
