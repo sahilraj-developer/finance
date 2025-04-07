@@ -99,6 +99,19 @@ const rejectedVouchers = [
 ]
 
 export default function VoucherApproval() {
+
+
+  // get 
+
+  // api/vouchers?status=pending
+  
+  // api/vouchers?status=approved
+  
+  // api/vouchers?status=rejected
+
+
+
+  
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedVoucher, setSelectedVoucher] = useState<any>(null)
   const [approvalDialogOpen, setApprovalDialogOpen] = useState(false)

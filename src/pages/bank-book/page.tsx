@@ -98,6 +98,25 @@ const transactions = {
 }
 
 export default function BankBook() {
+
+  // get
+
+  // /api/bank-transaction?bankId=${bankId}
+  
+  
+  // post 
+
+    // /api/bank-transaction?bankId=${bankId}
+    // {
+    //   "date": "2023-04-01",
+    //   "voucherNo": "123456",
+    //   "description": "Grant Deposit - Urban Development",
+    //   "amount": 500000,
+    //   "type": "Debit",
+    //   "bankId": "sbi"
+    // }
+    
+
   const [date, setDate] = useState<Date | undefined>(new Date())
   const [selectedBank, setSelectedBank] = useState("sbi")
 

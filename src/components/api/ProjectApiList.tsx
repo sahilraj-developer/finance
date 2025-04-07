@@ -422,7 +422,7 @@ export default function ProjectApiList() {
     api_forwardRefundAndRemissions: `${baseUrl}/api/finance/summary-refund-remission/forward`,
     // -----------------------------|| Master Gen Entries || -------------------------------
     api_genEntriesCreate: `${baseUrl}/api/finance/master-genEntries/create`,
-    api_getGenEntriesMaster: `${baseUrl}/api/finance/master-genEntries/get`,
+    // api_getGenEntriesMaster: `${baseUrl}/api/finance/master-genEntries/get`,
     api_genEntriesGet: `${baseUrl}/api/finance/master-genEntries/getAll`,
     api_genEntriesGetById: `${baseUrl}/api/finance/master-genEntries/getById`,
     api_genEntriesUpdateById: `${baseUrl}/api/finance/master-genEntries/update`,

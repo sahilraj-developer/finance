@@ -200,6 +200,21 @@ const accountGroups = [
 ]
 
 export default function GeneralLedger() {
+
+  // get
+  // api/general-ledger
+
+
+  // post 
+  // api/general-ledger
+
+  //  date: newTransaction.date,
+  // voucherNo: newTransaction.voucherNo,
+  // description: newTransaction.description,
+  // debit: newTransaction.debit,
+  // credit: newTransaction.credit,
+
+
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({})
   const [expandedAccounts, setExpandedAccounts] = useState<Record<string, boolean>>({})
   const [searchTerm, setSearchTerm] = useState("")
