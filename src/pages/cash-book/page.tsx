@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -14,7 +14,9 @@ import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Link } from "react-router-dom"
 
-
+import AxiosInterceptors from "@/components/common/AxiosInterceptors";
+import ApiHeader from "@/components/api/ApiHeader";
+import ProjectApiList from "@/components/api/ProjectApiList";
 
 
 
@@ -69,36 +71,81 @@ const creditEntries = [
   },
 ]
 
-// const handleFilterClick = () => {
-//   setLoading(true);
-//   AxiosInterceptors.post(
-//     `${api_getCashbookDetails}?code=${selectedMajor}${selectedMinor}${selectedDetail}&to=${toDate}&from=${fromDate}`,
-//     {},
-//     ApiHeader()
-//   )
-//     .then(function (response) {
-//       setLoading(false);
-//       setCashbookPaymentData(response?.data?.data?.payments);
-//       setCashbookReceptData(response?.data?.data?.receipts);
-//     })
-//     .catch(function (error) {
-//       setLoading(false);
-//       toast.error("Something went wrong");
-//     });
-// };
+
 
 // // ===========================================================================
 
-// const {
-//   api_getCashbookDetails,
-//   api_postCashbookDetails,
-//   api_updateCashbookDetails,
-//   api_deleteCashbookDetails,
-//   api_getRejectCashbookDetails,
-//   api_bankAccountGet,
-// } = ProjectApiList();
+const {
+  api_getCashbookDetails,
+  api_postCashbookDetails,
+  api_updateCashbookDetails,
+  api_deleteCashbookDetails,
+  api_getRejectCashbookDetails,
+  api_bankAccountGet,
+} = ProjectApiList();
 
 export default function CashBook() {
+
+
+
+
+  const [loading,setLoading] = useState(true);
+
+  const [cashbookPaymentData,setCashbookPaymentData] = useState([]);
+  const [cashbookReceptData,setCashbookReceptData] = useState([]);
+  
+  
+
+// const handleFilterClick = () => {
+//   setLoading(true);
+//   AxiosInterceptors.post(
+//     `${api_getCashbookDetails}`,
+
+//     ApiHeader()
+//   )
+//     .then(function (response: any) {
+//       setLoading(false);
+//       console.log("response",response)
+//       // setCashbookPaymentData(response?.data?.data?.payments);
+//       // setCashbookReceptData(response?.data?.data?.receipts);
+//     })
+//     .catch(function (error: any) {
+//       setLoading(false);
+//       // toast.error("Something went wrong");
+//     });
+// };
+
+
+
+const getCashBookPaymentData = () => {
+  setLoading(true);
+  AxiosInterceptors.get(
+    `${api_getCashbookDetails}`,
+    ApiHeader()
+  )
+    .then(function (response) {
+      setLoading(false);
+
+      console.log("responseresponse",response?.data?.data?.payments)
+      setCashbookPaymentData(response?.data?.data?.payments);
+      setCashbookReceptData(response?.data?.data?.receipts);
+    })
+    .catch(function (error) {
+      setLoading(false);
+      // toast.error("Something went wrong");
+    });
+};
+
+
+useEffect(() => {
+  // activeTab != "draft" && getCashBookPaymentData();
+  // getCashBookReceptData();
+  // getCashBookReceptDraftData();
+
+  getCashBookPaymentData();
+}, []);
+
+
 
 
 
@@ -226,12 +273,12 @@ export default function CashBook() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {debitEntries.map((entry) => (
+                {cashbookReceptData.map((entry:any) => (
                   <TableRow key={entry.id}>
                     <TableCell>{new Date(entry.date).toLocaleDateString("en-IN")}</TableCell>
                     <TableCell>{entry.voucherNo}</TableCell>
                     <TableCell className="hidden md:table-cell">
-                      <Badge variant="outline">{entry.type}</Badge>
+                      <Badge variant="outline">{entry.category}</Badge>
                     </TableCell>
                     <TableCell>{entry.description}</TableCell>
                     <TableCell className="text-right font-medium">{entry.amount.toLocaleString("en-IN")}</TableCell>
@@ -268,12 +315,12 @@ export default function CashBook() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {creditEntries.map((entry:any) => (
+                {cashbookPaymentData.map((entry:any) => (
                   <TableRow key={entry.id}>
                     <TableCell>{new Date(entry.date).toLocaleDateString("en-IN")}</TableCell>
                     <TableCell>{entry.voucherNo}</TableCell>
                     <TableCell className="hidden md:table-cell">
-                      <Badge variant="outline">{entry.type}</Badge>
+                      <Badge variant="outline">{entry.category}</Badge>
                     </TableCell>
                     <TableCell>{entry.description}</TableCell>
                     <TableCell className="text-right font-medium">{entry.amount.toLocaleString("en-IN")}</TableCell>
