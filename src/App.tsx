@@ -61,7 +61,7 @@ export default function App() {
             <Route path="/property-tax" element={ <PropertyTaxPage />  }  />
             <Route path="/property-tax/payment" element={ <PropertyTaxPayment />  }  />
             <Route path="/receipt-management" element={ <ReceiptManagement />  }  />
-            <Route path="/reconciliation" element={ <Reconciliation />  }  />
+            {/* <Route path="/reconciliation" element={ <Reconciliation />  }  /> */}
             <Route path="/reconciliation" element={ <Reconciliation />  }  />
             <Route path="/revenue-dashboard" element={ <RevenueDashboard />  }  />
             <Route path="/trade-license" element={ <TradeLicensePage />  }  />
