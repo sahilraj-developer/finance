@@ -54,9 +54,11 @@ const {
 export default function NewCashbookEntry() {
   const router = useNavigate()
   const [date, setDate] = useState<Date | undefined>(new Date())
-  const [transactionType, setTransactionType] = useState<string>("receipt")
+  const [transactionType, setTransactionType] = useState<string>("debit")
   const [subType, setSubType] = useState<string>("")
   const [amount, setAmount] = useState<string>("")
+  const [voucherNumber, setVoucherNumber] = useState<string>("")
+  const [description, setDescription] = useState<string>("")
 
   const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault()
@@ -71,10 +73,11 @@ export default function NewCashbookEntry() {
     }
 
     const payload = {
-      voucherNo: "VCH-1024", 
+      voucherNo: `VCH-${voucherNumber}`,  
       date: date.toISOString().split("T")[0],
-      transactionType,
-      subType,
+      description:description,
+      entryType:transactionType,
+      category:subType,
       amount: Number(amount),
     }
 
@@ -102,7 +105,7 @@ export default function NewCashbookEntry() {
       console.log("Response:", response?.data)
 
       // Optional: Navigate after saving
-      // router("/cashbook")
+      router("/cash-book")
 
     } catch (error) {
       // toast.error("Something went wrong while saving.")
@@ -149,20 +152,20 @@ export default function NewCashbookEntry() {
 
               <div className="space-y-2">
                 <Label htmlFor="voucher-no">Voucher Number</Label>
-                <Input id="voucher-no" placeholder="RMC/CB/2023-24/0001" />
+                <Input id="voucher-no" placeholder="0001" onChange={(e) => setVoucherNumber(e.target.value)} />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="transaction-type">Transaction Type</Label>
                 <RadioGroup value={transactionType} onValueChange={setTransactionType} className="flex space-x-4">
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="receipt" id="receipt" />
+                    <RadioGroupItem value="debit" id="receipt" />
                     <Label htmlFor="receipt" className="cursor-pointer">
                       Receipt (Debit)
                     </Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="payment" id="payment" />
+                    <RadioGroupItem value="credit" id="payment" />
                     <Label htmlFor="payment" className="cursor-pointer">
                       Payment (Credit)
                     </Label>
@@ -173,13 +176,13 @@ export default function NewCashbookEntry() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="sub-type">{transactionType === "receipt" ? "Receipt Type" : "Payment Type"}</Label>
+                <Label htmlFor="sub-type">{transactionType === "debit" ? "Receipt Type" : "Payment Type"}</Label>
                 <Select value={subType} onValueChange={setSubType}>
                   <SelectTrigger>
                     <SelectValue placeholder={`Select ${transactionType} type`} />
                   </SelectTrigger>
                   <SelectContent>
-                    {transactionType === "receipt"
+                    {transactionType === "debit"
                       ? receiptTypes.map((type) => (
                           <SelectItem key={type.value} value={type.value}>
                             {type.label}
@@ -208,16 +211,16 @@ export default function NewCashbookEntry() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="from-to">{transactionType === "receipt" ? "Received From" : "Paid To"}</Label>
+              <Label htmlFor="from-to">{transactionType === "debit" ? "Received From" : "Paid To"}</Label>
               <Input
                 id="from-to"
-                placeholder={transactionType === "receipt" ? "Enter payer name" : "Enter payee name"}
+                placeholder={transactionType === "debit" ? "Enter payer name" : "Enter payee name"}
               />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="description">Description</Label>
-              <Textarea id="description" placeholder="Enter transaction details" className="min-h-[100px]" />
+              <Textarea id="description" placeholder="Enter transaction details" className="min-h-[100px]" onChange={(e) => setDescription(e.target.value)} />
             </div>
 
             <div className="text-xs text-muted-foreground mt-2">

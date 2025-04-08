@@ -569,7 +569,7 @@ export default function VoucherEntry() {
 
         {/* Journal Voucher */}
         <TabsContent value="journal" className="space-y-4">
-          <Card>
+          {/* <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
                 <FileText className="mr-2 h-5 w-5" />
@@ -581,12 +581,105 @@ export default function VoucherEntry() {
                 Journal Voucher form will be displayed here
               </div>
             </CardContent>
+          </Card> */}
+
+<Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <FileText className="mr-2 h-5 w-5" />
+                Journal Voucher
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="receipt-no">Receipt No.</Label>
+                  <Input id="receipt-no" placeholder="RV/2023-24/0001" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="receipt-date">Date</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn("w-full justify-start text-left font-normal", !date && "text-muted-foreground")}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {date ? format(date, "PPP") : <span>Pick a date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="receipt-mode">Receipt Mode</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select receipt mode" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="cash">Cash</SelectItem>
+                      <SelectItem value="cheque">Cheque</SelectItem>
+                      <SelectItem value="bank-transfer">Bank Transfer</SelectItem>
+                      <SelectItem value="online">Online Payment</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="payer-name">Payer Name</Label>
+                  <Input id="payer-name" placeholder="Enter payer name" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="payer-contact">Payer Contact</Label>
+                  <Input id="payer-contact" placeholder="Enter contact details" />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="receipt-purpose">Purpose</Label>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select purpose" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="tax">Property Tax</SelectItem>
+                    <SelectItem value="water">Water Charges</SelectItem>
+                    <SelectItem value="license">License Fee</SelectItem>
+                    <SelectItem value="rent">Rent</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="receipt-description">Description</Label>
+                <Textarea id="receipt-description" placeholder="Enter receipt details" />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="receipt-amount">Amount (₹)</Label>
+                <Input id="receipt-amount" type="number" placeholder="0.00" />
+              </div>
+            </CardContent>
+            <CardFooter className="flex justify-between border-t px-6 py-4">
+              <Button variant="outline">Cancel</Button>
+              <div className="flex gap-2">
+                <Button variant="outline">Save as Draft</Button>
+                <Button>Generate Receipt</Button>
+              </div>
+            </CardFooter>
           </Card>
+
         </TabsContent>
 
         {/* Contra Voucher */}
         <TabsContent value="contra" className="space-y-4">
-          <Card>
+          {/* <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
                 <FileText className="mr-2 h-5 w-5" />
@@ -598,6 +691,99 @@ export default function VoucherEntry() {
                 Contra Voucher form will be displayed here
               </div>
             </CardContent>
+          </Card> */}
+
+
+<Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <FileText className="mr-2 h-5 w-5" />
+                Contra Voucher
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="receipt-no">Receipt No.</Label>
+                  <Input id="receipt-no" placeholder="RV/2023-24/0001" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="receipt-date">Date</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn("w-full justify-start text-left font-normal", !date && "text-muted-foreground")}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {date ? format(date, "PPP") : <span>Pick a date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="receipt-mode">Receipt Mode</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select receipt mode" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="cash">Cash</SelectItem>
+                      <SelectItem value="cheque">Cheque</SelectItem>
+                      <SelectItem value="bank-transfer">Bank Transfer</SelectItem>
+                      <SelectItem value="online">Online Payment</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="payer-name">Payer Name</Label>
+                  <Input id="payer-name" placeholder="Enter payer name" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="payer-contact">Payer Contact</Label>
+                  <Input id="payer-contact" placeholder="Enter contact details" />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="receipt-purpose">Purpose</Label>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select purpose" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="tax">Property Tax</SelectItem>
+                    <SelectItem value="water">Water Charges</SelectItem>
+                    <SelectItem value="license">License Fee</SelectItem>
+                    <SelectItem value="rent">Rent</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="receipt-description">Description</Label>
+                <Textarea id="receipt-description" placeholder="Enter receipt details" />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="receipt-amount">Amount (₹)</Label>
+                <Input id="receipt-amount" type="number" placeholder="0.00" />
+              </div>
+            </CardContent>
+            <CardFooter className="flex justify-between border-t px-6 py-4">
+              <Button variant="outline">Cancel</Button>
+              <div className="flex gap-2">
+                <Button variant="outline">Save as Draft</Button>
+                <Button>Generate Receipt</Button>
+              </div>
+            </CardFooter>
           </Card>
         </TabsContent>
 
