@@ -22,6 +22,7 @@ import BudgetPreparation from "./pages/budget-preparation/page";
 import BudgetRevision from "./pages/budget-revision/page";
 import BudgetSanction from "./pages/budget-sanction/page";
 import CashBook from "./pages/cash-book/page";
+import CashBookCreate from "./pages/cash-book/new-entry";
 import ExpenditureManagement from "./pages/expenditure-management/page";
 import FinancialStatements from "./pages/financial-statements/page";
 import GeneralLedger from "./pages/general-ledger/page";
@@ -54,6 +55,7 @@ export default function App() {
             <Route path="/budget-revision" element={ <BudgetRevision />  }  />
             <Route path="/budget-sanction" element={ <BudgetSanction />  }  />
             <Route path="/cash-book" element={ <CashBook />  }  />
+            <Route path="/cash-book/create" element={ <CashBookCreate />  }  />
             <Route path="/expenditure-management" element={ <ExpenditureManagement />  }  />
             <Route path="/financial-statements" element={ <FinancialStatements />  }  />
             <Route path="/general-ledger" element={ <GeneralLedger />  }  />

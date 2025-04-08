@@ -12,7 +12,7 @@ import { Calendar } from "@/components/ui/calendar"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 import AxiosInterceptors from "@/components/common/AxiosInterceptors";
 import ApiHeader from "@/components/api/ApiHeader";
@@ -169,7 +169,10 @@ useEffect(() => {
   // Calculate totals
   const totalDebit = debitEntries.reduce((sum, entry) => sum + entry.amount, 0)
   const totalCredit = creditEntries.reduce((sum, entry) => sum + entry.amount, 0)
-  const closingBalance = totalDebit - totalCredit
+  const closingBalance = totalDebit - totalCredit;
+
+  const router = useNavigate();
+
 
   return (
     <div className="flex flex-col gap-4">
@@ -245,7 +248,7 @@ useEffect(() => {
             <Filter className="h-4 w-4" />
             <span className="sr-only">Filter</span>
           </Button>
-          <Button>
+          <Button onClick={() => router("/cash-book/create")}>
             <Plus className="mr-2 h-4 w-4" />
             New Entry
           </Button>

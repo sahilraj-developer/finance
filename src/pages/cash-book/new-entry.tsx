@@ -17,6 +17,9 @@ import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useNavigate } from "react-router-dom"
+import AxiosInterceptors from "@/components/common/AxiosInterceptors"
+import ProjectApiList from "@/components/api/ProjectApiList"
+import ApiHeader from "@/components/api/ApiHeader"
 
 const transactionTypes = [
   { value: "receipt", label: "Receipt (Debit)" },
@@ -41,6 +44,13 @@ const paymentTypes = [
   { value: "other", label: "Other Payment" },
 ]
 
+
+const {
+  api_postCashbookDetails,
+
+} = ProjectApiList();
+
+
 export default function NewCashbookEntry() {
   const router = useNavigate()
   const [date, setDate] = useState<Date | undefined>(new Date())
@@ -48,11 +58,58 @@ export default function NewCashbookEntry() {
   const [subType, setSubType] = useState<string>("")
   const [amount, setAmount] = useState<string>("")
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault()
     // Here you would normally save the data to your backend
     // For now, we'll just navigate back to the cash book
-    router("/cash-book")
+    // router("/cash-book")
+
+
+    if (!date || !transactionType || !subType || !amount) {
+      // toast.error("Please fill in all fields")
+      return
+    }
+
+    const payload = {
+      voucherNo: "VCH-1024", 
+      date: date.toISOString().split("T")[0],
+      transactionType,
+      subType,
+      amount: Number(amount),
+    }
+
+
+    // const payload = {
+    //   voucher_no: "", // ✅ Important: Ensure this is included
+    //   date: date?.toISOString().split("T")[0], // Format: YYYY-MM-DD
+    //   amount,
+    //   description,
+    //   transaction_type: transactionType,
+    //   receipt_type: transactionType === "receipt" ? receiptType : undefined,
+    //   // Add other fields as required
+    // }
+
+    try {
+      // setLoading(true)
+
+      const response = await AxiosInterceptors.post(
+        `${api_postCashbookDetails}`,
+        payload,
+        ApiHeader()
+      )
+
+      // toast.success("Entry saved successfully!")
+      console.log("Response:", response?.data)
+
+      // Optional: Navigate after saving
+      // router("/cashbook")
+
+    } catch (error) {
+      // toast.error("Something went wrong while saving.")
+      console.error("Error:", error)
+    } finally {
+      // setLoading(false)
+    }
   }
 
   return (
