@@ -127,7 +127,7 @@ export default function ReceiptManagement() {
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold tracking-tight">
-          Receipt Management - Ranchi Municipal Corporation (Form GEN-4)
+          Receipt Management - Ranchi Municipal Corporation 
         </h1>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm">
@@ -139,9 +139,9 @@ export default function ReceiptManagement() {
 
       <Tabs defaultValue="new-receipt" className="space-y-4">
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="new-receipt">New Receipt</TabsTrigger>
-          <TabsTrigger value="receipt-list">Receipt List</TabsTrigger>
-          <TabsTrigger value="dishonored-cheques">Dishonored Cheques</TabsTrigger>
+          <TabsTrigger value="new-receipt">New Receipt (Form GEN-8)</TabsTrigger>
+          <TabsTrigger value="receipt-list">Receipt List (Form GEN-9)</TabsTrigger>
+          <TabsTrigger value="dishonored-cheques">Dishonored Cheques (Form GEN-10)</TabsTrigger>
         </TabsList>
 
         {/* New Receipt Tab */}

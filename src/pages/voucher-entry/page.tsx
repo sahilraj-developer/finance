@@ -257,8 +257,8 @@ export default function VoucherEntry() {
         <TabsList className="grid grid-cols-5 w-full">
           <TabsTrigger value="payment">Payment (GEN-5)</TabsTrigger>
           <TabsTrigger value="receipt">Receipt (GEN-4)</TabsTrigger>
-          <TabsTrigger value="journal">Journal</TabsTrigger>
-          <TabsTrigger value="contra">Contra</TabsTrigger>
+          <TabsTrigger value="journal">Journal  (GEN-6)</TabsTrigger>
+          <TabsTrigger value="contra">Contra  (GEN-7)</TabsTrigger>
           <TabsTrigger value="past">Past Vouchers</TabsTrigger>
         </TabsList>
 

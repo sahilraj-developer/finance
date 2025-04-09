@@ -37,6 +37,8 @@ import VoucherApproval from "./pages/voucher-approval/page";
 import VoucherEntry from "./pages/voucher-entry/page";
 import WaterTaxPage from "./pages/water-tax/page";
 import RevenueDashboard from "./pages/revenue-dashboard/page";
+import Register from "./pages/register/page";
+import FunctionWise from "./pages/function-wise-subsidary/page";
 
 export default function App() {
   return (
@@ -71,6 +73,10 @@ export default function App() {
             <Route path="/voucher-approval" element={ <VoucherApproval />  }  />
             <Route path="/voucher-entry" element={ <VoucherEntry />  }  />
             <Route path="/water-tax" element={ <WaterTaxPage />  }  />
+
+
+            <Route path="/register" element={ <Register />  }  />
+            <Route path="/function-wise-subsidary" element={ <FunctionWise />  }  />
            
 
             

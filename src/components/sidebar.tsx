@@ -102,6 +102,16 @@ const navItems: NavItem[] = [
         href: "/reconciliation",
         icon: <RefreshCw className="h-5 w-5" />,
       },
+      {
+        title: "Register",
+        href: "/register",
+        icon: <RefreshCw className="h-5 w-5" />,
+      },
+      {
+        title: "Function wise ",
+        href: "/function-wise-subsidary",
+        icon: <ReceiptText className="h-5 w-5" />,
+      },
     ],
   },
   {

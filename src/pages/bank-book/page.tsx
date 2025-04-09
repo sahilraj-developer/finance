@@ -133,7 +133,7 @@ export default function BankBook() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold tracking-tight">Bank Book (GEN-1 Form)</h1>
+        <h1 className="text-2xl font-bold tracking-tight">Bank Book (GEN-2 Form)</h1>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm">
             <Printer className="mr-2 h-4 w-4" />
