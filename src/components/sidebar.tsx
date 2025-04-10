@@ -272,7 +272,7 @@ export default function Sidebar() {
           </div>
         </SheetContent>
       </Sheet>
-      <div className="hidden border-r bg-muted/40 lg:block lg:w-[240px]">
+      <div className="hidden border-r bg-muted/40 lg:block lg:w-[240px] h-screen overflow-y-auto">
         <div className="flex h-full flex-col">
           <div className="flex h-14 items-center border-b px-4">
             <Link to="/" className="flex items-center gap-2 font-semibold">
@@ -280,9 +280,10 @@ export default function Sidebar() {
               <span>Jharkhand Finance</span>
             </Link>
           </div>
-          <ScrollArea className="flex-1">
-            <nav className="grid gap-1 p-2">{renderNavItems(navItems)}</nav>
-          </ScrollArea>
+          <ScrollArea className="flex-1 ">
+  <nav className="grid gap-1 p-2">{renderNavItems(navItems)}</nav>
+</ScrollArea>
+
         </div>
       </div>
     </>
