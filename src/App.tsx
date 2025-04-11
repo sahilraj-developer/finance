@@ -38,6 +38,7 @@ import VoucherEntry from "./pages/voucher-entry/page";
 import WaterTaxPage from "./pages/water-tax/page";
 import RevenueDashboard from "./pages/revenue-dashboard/page";
 import Register from "./pages/register/page";
+import Summary from "./pages/summaries/page";
 import FunctionWise from "./pages/function-wise-subsidary/page";
 
 export default function App() {
@@ -76,6 +77,7 @@ export default function App() {
 
 
             <Route path="/register" element={ <Register />  }  />
+            <Route path="/summary" element={ <Summary />  }  />
             <Route path="/function-wise-subsidary" element={ <FunctionWise />  }  />
            
 
