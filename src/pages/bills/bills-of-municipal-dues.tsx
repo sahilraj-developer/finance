@@ -156,7 +156,7 @@ export default function BillsOfMunicipalDues() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Bills of Municipal Dues</CardTitle>
+        <CardTitle>Bills of Municipal Dues (Gen 21)</CardTitle>
         <CardDescription>Record of all bills generated for municipal dues</CardDescription>
       </CardHeader>
       <CardContent>
