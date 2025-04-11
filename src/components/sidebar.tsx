@@ -108,6 +108,11 @@ const navItems: NavItem[] = [
         icon: <RefreshCw className="h-5 w-5" />,
       },
       {
+        title: "Data Register",
+        href: "/data-register",
+        icon: <RefreshCw className="h-5 w-5" />,
+      },
+      {
         title: "Summary",
         href: "/summary",
         icon: <RefreshCw className="h-5 w-5" />,

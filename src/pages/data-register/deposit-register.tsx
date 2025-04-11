@@ -11,6 +11,15 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
 
 interface DepositEntry {
   id: string
@@ -73,6 +82,48 @@ export default function DepositRegister() {
 
   const [date, setDate] = useState<Date | undefined>(new Date())
   const [filterAccount, setFilterAccount] = useState<string>("all")
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  // Form state
+  const [newDeposit, setNewDeposit] = useState<Partial<DepositEntry>>({
+    date: new Date(),
+    bankAccount: "SBI - 10023456789",
+    modeOfDeposit: "Cash",
+  })
+
+  const handleInputChange = (field: string, value: any) => {
+    setNewDeposit({
+      ...newDeposit,
+      [field]: value,
+    })
+  }
+
+  const handleSubmit = () => {
+    // Generate a new ID and deposit number
+    const newId = (deposits.length + 1).toString()
+    const newDepositNo = `DEP-${(deposits.length + 1).toString().padStart(3, "0")}`
+
+    const newDepositEntry: DepositEntry = {
+      id: newId,
+      depositNo: newDepositNo,
+      date: newDeposit.date || new Date(),
+      depositedBy: newDeposit.depositedBy || "",
+      purpose: newDeposit.purpose || "",
+      amount: Number(newDeposit.amount) || 0,
+      bankAccount: newDeposit.bankAccount || "SBI - 10023456789",
+      modeOfDeposit: newDeposit.modeOfDeposit || "Cash",
+      referenceNo: newDeposit.referenceNo,
+    }
+
+    setDeposits([...deposits, newDepositEntry])
+    setIsModalOpen(false)
+    // Reset form
+    setNewDeposit({
+      date: new Date(),
+      bankAccount: "SBI - 10023456789",
+      modeOfDeposit: "Cash",
+    })
+  }
 
   return (
     <Card>
@@ -118,7 +169,7 @@ export default function DepositRegister() {
               <Download className="mr-2 h-4 w-4" />
               Export
             </Button>
-            <Button>
+            <Button onClick={() => setIsModalOpen(true)}>
               <Plus className="mr-2 h-4 w-4" />
               Add Deposit
             </Button>
@@ -196,6 +247,136 @@ export default function DepositRegister() {
             </span>
           </p>
         </div>
+
+        {/* Add Deposit Modal */}
+        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Add New Deposit</DialogTitle>
+              <DialogDescription>Enter the details of the new deposit entry.</DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="depositedBy" className="text-right">
+                  Deposited By
+                </Label>
+                <Input
+                  id="depositedBy"
+                  value={newDeposit.depositedBy || ""}
+                  onChange={(e) => handleInputChange("depositedBy", e.target.value)}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="purpose" className="text-right">
+                  Purpose
+                </Label>
+                <Input
+                  id="purpose"
+                  value={newDeposit.purpose || ""}
+                  onChange={(e) => handleInputChange("purpose", e.target.value)}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="amount" className="text-right">
+                  Amount (₹)
+                </Label>
+                <Input
+                  id="amount"
+                  type="number"
+                  value={newDeposit.amount || ""}
+                  onChange={(e) => handleInputChange("amount", e.target.value)}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="date" className="text-right">
+                  Date
+                </Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "col-span-3 justify-start text-left font-normal",
+                        !newDeposit.date && "text-muted-foreground",
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {newDeposit.date ? format(newDeposit.date, "PPP") : <span>Pick a date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={newDeposit.date}
+                      onSelect={(date) => handleInputChange("date", date)}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="bankAccount" className="text-right">
+                  Bank Account
+                </Label>
+                <Select
+                  value={newDeposit.bankAccount}
+                  onValueChange={(value) => handleInputChange("bankAccount", value)}
+                >
+                  <SelectTrigger className="col-span-3">
+                    <SelectValue placeholder="Select bank account" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="SBI - 10023456789">SBI - 10023456789</SelectItem>
+                    <SelectItem value="PNB - 20034567890">PNB - 20034567890</SelectItem>
+                    <SelectItem value="BOB - 30045678901">BOB - 30045678901</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="modeOfDeposit" className="text-right">
+                  Mode of Deposit
+                </Label>
+                <Select
+                  value={newDeposit.modeOfDeposit}
+                  onValueChange={(value) => handleInputChange("modeOfDeposit", value)}
+                >
+                  <SelectTrigger className="col-span-3">
+                    <SelectValue placeholder="Select mode" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Cash">Cash</SelectItem>
+                    <SelectItem value="Cheque">Cheque</SelectItem>
+                    <SelectItem value="RTGS">RTGS</SelectItem>
+                    <SelectItem value="NEFT">NEFT</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              {(newDeposit.modeOfDeposit === "Cheque" ||
+                newDeposit.modeOfDeposit === "RTGS" ||
+                newDeposit.modeOfDeposit === "NEFT") && (
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="referenceNo" className="text-right">
+                    Reference No.
+                  </Label>
+                  <Input
+                    id="referenceNo"
+                    value={newDeposit.referenceNo || ""}
+                    onChange={(e) => handleInputChange("referenceNo", e.target.value)}
+                    className="col-span-3"
+                  />
+                </div>
+              )}
+            </div>
+            <DialogFooter>
+              <Button type="submit" onClick={handleSubmit}>
+                Save
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </CardContent>
     </Card>
   )

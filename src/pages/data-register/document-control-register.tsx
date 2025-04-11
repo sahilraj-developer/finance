@@ -12,6 +12,15 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
 
 interface DocumentEntry {
   id: string
@@ -80,6 +89,96 @@ export default function DocumentControlRegister() {
   const [date, setDate] = useState<Date | undefined>(new Date())
   const [filterType, setFilterType] = useState<string>("all")
   const [filterStatus, setFilterStatus] = useState<string>("all")
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  // Form state
+  const [newDocument, setNewDocument] = useState<Partial<DocumentEntry>>({
+    receivedDate: new Date(),
+    balance: 0,
+    status: "in-stock",
+  })
+
+  const handleInputChange = (field: string, value: any) => {
+    setNewDocument({
+      ...newDocument,
+      [field]: value,
+    })
+
+    // Auto-calculate quantity and balance based on serial numbers
+    if (field === "serialFrom" || field === "serialTo") {
+      if (newDocument.serialFrom && newDocument.serialTo) {
+        const serialFrom = field === "serialFrom" ? value : newDocument.serialFrom
+        const serialTo = field === "serialTo" ? value : newDocument.serialTo
+
+        // Extract numeric parts if they exist
+        const fromMatch = serialFrom.match(/\d+/)
+        const toMatch = serialTo.match(/\d+/)
+
+        if (fromMatch && toMatch) {
+          const fromNum = Number.parseInt(fromMatch[0])
+          const toNum = Number.parseInt(toMatch[0])
+
+          if (!isNaN(fromNum) && !isNaN(toNum) && toNum >= fromNum) {
+            const quantity = toNum - fromNum + 1
+            setNewDocument((prev) => ({
+              ...prev,
+              quantity,
+              balance: quantity,
+            }))
+          }
+        }
+      }
+    }
+
+    // Auto-calculate status based on balance and quantity
+    if (field === "balance" || field === "quantity" || field === "issuedTo") {
+      const balance = field === "balance" ? Number(value) : Number(newDocument.balance) || 0
+      const quantity = field === "quantity" ? Number(value) : Number(newDocument.quantity) || 0
+      const issuedTo = field === "issuedTo" ? value : newDocument.issuedTo
+
+      let status: "in-stock" | "partially-issued" | "fully-issued" = "in-stock"
+
+      if (issuedTo) {
+        if (balance === 0 && quantity > 0) {
+          status = "fully-issued"
+        } else if (balance < quantity) {
+          status = "partially-issued"
+        }
+      }
+
+      setNewDocument((prev) => ({
+        ...prev,
+        status,
+      }))
+    }
+  }
+
+  const handleSubmit = () => {
+    // Generate a new ID
+    const newId = (documents.length + 1).toString()
+
+    const newDocumentEntry: DocumentEntry = {
+      id: newId,
+      documentType: newDocument.documentType || "",
+      serialFrom: newDocument.serialFrom || "",
+      serialTo: newDocument.serialTo || "",
+      quantity: Number(newDocument.quantity) || 0,
+      receivedDate: newDocument.receivedDate || new Date(),
+      issuedTo: newDocument.issuedTo || "",
+      issuedDate: newDocument.issuedDate,
+      balance: Number(newDocument.balance) || 0,
+      status: (newDocument.status as "in-stock" | "partially-issued" | "fully-issued") || "in-stock",
+    }
+
+    setDocuments([...documents, newDocumentEntry])
+    setIsModalOpen(false)
+    // Reset form
+    setNewDocument({
+      receivedDate: new Date(),
+      balance: 0,
+      status: "in-stock",
+    })
+  }
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -121,6 +220,7 @@ export default function DocumentControlRegister() {
                   {date ? format(date, "PPP") : <span>Pick a date</span>}
                 </Button>
               </PopoverTrigger>
+
               <PopoverContent className="w-auto p-0" align="start">
                 <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
               </PopoverContent>
@@ -154,7 +254,7 @@ export default function DocumentControlRegister() {
               <Download className="mr-2 h-4 w-4" />
               Export
             </Button>
-            <Button>
+            <Button onClick={() => setIsModalOpen(true)}>
               <Plus className="mr-2 h-4 w-4" />
               Add Document
             </Button>
@@ -228,6 +328,164 @@ export default function DocumentControlRegister() {
             </p>
           </div>
         </div>
+
+        {/* Add Document Modal */}
+        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Add New Document</DialogTitle>
+              <DialogDescription>Enter the details of the new document entry.</DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="documentType" className="text-right">
+                  Document Type
+                </Label>
+                <Select
+                  value={newDocument.documentType}
+                  onValueChange={(value) => handleInputChange("documentType", value)}
+                >
+                  <SelectTrigger className="col-span-3">
+                    <SelectValue placeholder="Select type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Receipt Book">Receipt Book</SelectItem>
+                    <SelectItem value="Cheque Book">Cheque Book</SelectItem>
+                    <SelectItem value="License Form">License Form</SelectItem>
+                    <SelectItem value="Property Tax Form">Property Tax Form</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="serialFrom" className="text-right">
+                  Serial From
+                </Label>
+                <Input
+                  id="serialFrom"
+                  value={newDocument.serialFrom || ""}
+                  onChange={(e) => handleInputChange("serialFrom", e.target.value)}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="serialTo" className="text-right">
+                  Serial To
+                </Label>
+                <Input
+                  id="serialTo"
+                  value={newDocument.serialTo || ""}
+                  onChange={(e) => handleInputChange("serialTo", e.target.value)}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="quantity" className="text-right">
+                  Quantity
+                </Label>
+                <Input
+                  id="quantity"
+                  type="number"
+                  value={newDocument.quantity || ""}
+                  onChange={(e) => handleInputChange("quantity", e.target.value)}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="receivedDate" className="text-right">
+                  Received Date
+                </Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "col-span-3 justify-start text-left font-normal",
+                        !newDocument.receivedDate && "text-muted-foreground",
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {newDocument.receivedDate ? format(newDocument.receivedDate, "PPP") : <span>Pick a date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={newDocument.receivedDate}
+                      onSelect={(date) => handleInputChange("receivedDate", date)}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="issuedTo" className="text-right">
+                  Issued To
+                </Label>
+                <Input
+                  id="issuedTo"
+                  value={newDocument.issuedTo || ""}
+                  onChange={(e) => handleInputChange("issuedTo", e.target.value)}
+                  className="col-span-3"
+                />
+              </div>
+              {newDocument.issuedTo && (
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="issuedDate" className="text-right">
+                    Issued Date
+                  </Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "col-span-3 justify-start text-left font-normal",
+                          !newDocument.issuedDate && "text-muted-foreground",
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {newDocument.issuedDate ? format(newDocument.issuedDate, "PPP") : <span>Pick a date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={newDocument.issuedDate}
+                        onSelect={(date) => handleInputChange("issuedDate", date)}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              )}
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="balance" className="text-right">
+                  Balance
+                </Label>
+                <Input
+                  id="balance"
+                  type="number"
+                  value={newDocument.balance || ""}
+                  onChange={(e) => handleInputChange("balance", e.target.value)}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="status" className="text-right">
+                  Status
+                </Label>
+                <div className="col-span-3 flex items-center">
+                  {getStatusBadge(newDocument.status || "in-stock")}
+                  <span className="ml-2 text-sm text-muted-foreground">(Auto-calculated)</span>
+                </div>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit" onClick={handleSubmit}>
+                Save
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </CardContent>
     </Card>
   )

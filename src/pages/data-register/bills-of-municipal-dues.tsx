@@ -12,6 +12,15 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
 
 interface BillEntry {
   id: string
@@ -71,6 +80,65 @@ export default function BillsOfMunicipalDues() {
   const [date, setDate] = useState<Date | undefined>(new Date())
   const [filterType, setFilterType] = useState<string>("all")
   const [filterStatus, setFilterStatus] = useState<string>("all")
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  // Form state
+  const [newBill, setNewBill] = useState<Partial<BillEntry>>({
+    billDate: new Date(),
+    dueDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),
+    status: "unpaid",
+  })
+
+  const handleInputChange = (field: string, value: any) => {
+    setNewBill({
+      ...newBill,
+      [field]: value,
+    })
+
+    // Auto-calculate status based on due date
+    if (field === "dueDate") {
+      const dueDate = new Date(value)
+      const today = new Date()
+
+      if (dueDate < today) {
+        setNewBill((prev) => ({
+          ...prev,
+          status: "overdue",
+        }))
+      } else {
+        setNewBill((prev) => ({
+          ...prev,
+          status: "unpaid",
+        }))
+      }
+    }
+  }
+
+  const handleSubmit = () => {
+    // Generate a new ID and bill number
+    const newId = (bills.length + 1).toString()
+    const newBillNo = `BILL-${(bills.length + 1).toString().padStart(3, "0")}`
+
+    const newBillEntry: BillEntry = {
+      id: newId,
+      billNo: newBillNo,
+      billDate: newBill.billDate || new Date(),
+      partyName: newBill.partyName || "",
+      billType: newBill.billType || "",
+      amount: Number(newBill.amount) || 0,
+      dueDate: newBill.dueDate || new Date(new Date().setMonth(new Date().getMonth() + 1)),
+      status: (newBill.status as "paid" | "unpaid" | "overdue") || "unpaid",
+    }
+
+    setBills([...bills, newBillEntry])
+    setIsModalOpen(false)
+    // Reset form
+    setNewBill({
+      billDate: new Date(),
+      dueDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),
+      status: "unpaid",
+    })
+  }
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -145,7 +213,7 @@ export default function BillsOfMunicipalDues() {
               <Download className="mr-2 h-4 w-4" />
               Export
             </Button>
-            <Button>
+            <Button onClick={() => setIsModalOpen(true)}>
               <Plus className="mr-2 h-4 w-4" />
               Generate Bill
             </Button>
@@ -232,6 +300,131 @@ export default function BillsOfMunicipalDues() {
             </p>
           </div>
         </div>
+
+        {/* Generate Bill Modal */}
+        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Generate New Bill</DialogTitle>
+              <DialogDescription>Enter the details of the new bill to be generated.</DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="partyName" className="text-right">
+                  Party Name
+                </Label>
+                <Input
+                  id="partyName"
+                  value={newBill.partyName || ""}
+                  onChange={(e) => handleInputChange("partyName", e.target.value)}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="billType" className="text-right">
+                  Bill Type
+                </Label>
+                <Select value={newBill.billType} onValueChange={(value) => handleInputChange("billType", value)}>
+                  <SelectTrigger className="col-span-3">
+                    <SelectValue placeholder="Select type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Property Tax">Property Tax</SelectItem>
+                    <SelectItem value="Water Charges">Water Charges</SelectItem>
+                    <SelectItem value="Trade License">Trade License</SelectItem>
+                    <SelectItem value="Advertisement Tax">Advertisement Tax</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="amount" className="text-right">
+                  Amount (₹)
+                </Label>
+                <Input
+                  id="amount"
+                  type="number"
+                  value={newBill.amount || ""}
+                  onChange={(e) => handleInputChange("amount", e.target.value)}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="billDate" className="text-right">
+                  Bill Date
+                </Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "col-span-3 justify-start text-left font-normal",
+                        !newBill.billDate && "text-muted-foreground",
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {newBill.billDate ? format(newBill.billDate, "PPP") : <span>Pick a date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={newBill.billDate}
+                      onSelect={(date) => handleInputChange("billDate", date)}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="dueDate" className="text-right">
+                  Due Date
+                </Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "col-span-3 justify-start text-left font-normal",
+                        !newBill.dueDate && "text-muted-foreground",
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {newBill.dueDate ? format(newBill.dueDate, "PPP") : <span>Pick a date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={newBill.dueDate}
+                      onSelect={(date) => handleInputChange("dueDate", date)}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="status" className="text-right">
+                  Status
+                </Label>
+                <Select value={newBill.status} onValueChange={(value) => handleInputChange("status", value)}>
+                  <SelectTrigger className="col-span-3">
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="unpaid">Unpaid</SelectItem>
+                    <SelectItem value="paid">Paid</SelectItem>
+                    <SelectItem value="overdue">Overdue</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit" onClick={handleSubmit}>
+                Generate Bill
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </CardContent>
     </Card>
   )

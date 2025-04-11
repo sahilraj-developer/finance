@@ -10,6 +10,16 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface CollectionEntry {
   id: string
@@ -56,6 +66,45 @@ export default function CollectionRegister() {
   ])
 
   const [date, setDate] = useState<Date | undefined>(new Date())
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  // Form state
+  const [newEntry, setNewEntry] = useState<Partial<CollectionEntry>>({
+    date: new Date(),
+    modeOfPayment: "Cash",
+  })
+
+  const handleInputChange = (field: string, value: any) => {
+    setNewEntry({
+      ...newEntry,
+      [field]: value,
+    })
+  }
+
+  const handleSubmit = () => {
+    // Generate a new ID and receipt number
+    const newId = (collections.length + 1).toString()
+    const newReceiptNo = `REC-${(collections.length + 1).toString().padStart(3, "0")}`
+
+    const newCollection: CollectionEntry = {
+      id: newId,
+      receiptNo: newReceiptNo,
+      date: newEntry.date || new Date(),
+      collectedFrom: newEntry.collectedFrom || "",
+      purpose: newEntry.purpose || "",
+      amount: Number(newEntry.amount) || 0,
+      modeOfPayment: newEntry.modeOfPayment || "Cash",
+      referenceNo: newEntry.referenceNo,
+    }
+
+    setCollections([...collections, newCollection])
+    setIsModalOpen(false)
+    // Reset form
+    setNewEntry({
+      date: new Date(),
+      modeOfPayment: "Cash",
+    })
+  }
 
   return (
     <Card>
@@ -90,7 +139,7 @@ export default function CollectionRegister() {
               <Download className="mr-2 h-4 w-4" />
               Export
             </Button>
-            <Button>
+            <Button onClick={() => setIsModalOpen(true)}>
               <Plus className="mr-2 h-4 w-4" />
               Add Entry
             </Button>
@@ -134,6 +183,120 @@ export default function CollectionRegister() {
             </span>
           </p>
         </div>
+
+        {/* Add Entry Modal */}
+        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Add New Collection</DialogTitle>
+              <DialogDescription>Enter the details of the new collection entry.</DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="collectedFrom" className="text-right">
+                  Collected From
+                </Label>
+                <Input
+                  id="collectedFrom"
+                  value={newEntry.collectedFrom || ""}
+                  onChange={(e) => handleInputChange("collectedFrom", e.target.value)}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="purpose" className="text-right">
+                  Purpose
+                </Label>
+                <Input
+                  id="purpose"
+                  value={newEntry.purpose || ""}
+                  onChange={(e) => handleInputChange("purpose", e.target.value)}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="amount" className="text-right">
+                  Amount (₹)
+                </Label>
+                <Input
+                  id="amount"
+                  type="number"
+                  value={newEntry.amount || ""}
+                  onChange={(e) => handleInputChange("amount", e.target.value)}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="date" className="text-right">
+                  Date
+                </Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "col-span-3 justify-start text-left font-normal",
+                        !newEntry.date && "text-muted-foreground",
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {newEntry.date ? format(newEntry.date, "PPP") : <span>Pick a date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={newEntry.date}
+                      onSelect={(date) => handleInputChange("date", date)}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="modeOfPayment" className="text-right">
+                  Payment Mode
+                </Label>
+                <Select
+                  value={newEntry.modeOfPayment}
+                  onValueChange={(value) => handleInputChange("modeOfPayment", value)}
+                >
+                  <SelectTrigger className="col-span-3">
+                    <SelectValue placeholder="Select payment mode" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Cash">Cash</SelectItem>
+                    <SelectItem value="Cheque">Cheque</SelectItem>
+                    <SelectItem value="Online">Online</SelectItem>
+                    <SelectItem value="RTGS">RTGS</SelectItem>
+                    <SelectItem value="NEFT">NEFT</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              {(newEntry.modeOfPayment === "Cheque" ||
+                newEntry.modeOfPayment === "Online" ||
+                newEntry.modeOfPayment === "RTGS" ||
+                newEntry.modeOfPayment === "NEFT") && (
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="referenceNo" className="text-right">
+                    Reference No.
+                  </Label>
+                  <Input
+                    id="referenceNo"
+                    value={newEntry.referenceNo || ""}
+                    onChange={(e) => handleInputChange("referenceNo", e.target.value)}
+                    className="col-span-3"
+                  />
+                </div>
+              )}
+            </div>
+            <DialogFooter>
+              <Button type="submit" onClick={handleSubmit}>
+                Save
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </CardContent>
     </Card>
   )

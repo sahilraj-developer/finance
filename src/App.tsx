@@ -40,6 +40,8 @@ import RevenueDashboard from "./pages/revenue-dashboard/page";
 import Register from "./pages/register/page";
 import Summary from "./pages/summaries/page";
 import FunctionWise from "./pages/function-wise-subsidary/page";
+import DataRegister from "./pages/data-register/page";
+
 
 export default function App() {
   return (
@@ -79,6 +81,7 @@ export default function App() {
             <Route path="/register" element={ <Register />  }  />
             <Route path="/summary" element={ <Summary />  }  />
             <Route path="/function-wise-subsidary" element={ <FunctionWise />  }  />
+            <Route path="/data-register" element={ <DataRegister />  }  />
            
 
             

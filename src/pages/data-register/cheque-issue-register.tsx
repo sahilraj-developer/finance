@@ -11,6 +11,16 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface ChequeEntry {
   id: string
@@ -68,6 +78,48 @@ export default function ChequeIssueRegister() {
   ])
 
   const [date, setDate] = useState<Date | undefined>(new Date())
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  // Form state
+  const [newCheque, setNewCheque] = useState<Partial<ChequeEntry>>({
+    date: new Date(),
+    bankAccount: "SBI - 10023456789",
+    status: "pending",
+  })
+
+  const handleInputChange = (field: string, value: any) => {
+    setNewCheque({
+      ...newCheque,
+      [field]: value,
+    })
+  }
+
+  const handleSubmit = () => {
+    // Generate a new ID and cheque number
+    const newId = (cheques.length + 1).toString()
+    const lastChequeNo = Number.parseInt(cheques[cheques.length - 1].chequeNo)
+    const newChequeNo = (lastChequeNo + 1).toString()
+
+    const newChequeEntry: ChequeEntry = {
+      id: newId,
+      chequeNo: newChequeNo,
+      date: newCheque.date || new Date(),
+      payeeName: newCheque.payeeName || "",
+      purpose: newCheque.purpose || "",
+      amount: Number(newCheque.amount) || 0,
+      bankAccount: newCheque.bankAccount || "SBI - 10023456789",
+      status: (newCheque.status as "cleared" | "pending" | "cancelled") || "pending",
+    }
+
+    setCheques([...cheques, newChequeEntry])
+    setIsModalOpen(false)
+    // Reset form
+    setNewCheque({
+      date: new Date(),
+      bankAccount: "SBI - 10023456789",
+      status: "pending",
+    })
+  }
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -119,7 +171,7 @@ export default function ChequeIssueRegister() {
               <Download className="mr-2 h-4 w-4" />
               Export
             </Button>
-            <Button>
+            <Button onClick={() => setIsModalOpen(true)}>
               <Plus className="mr-2 h-4 w-4" />
               Issue Cheque
             </Button>
@@ -197,6 +249,117 @@ export default function ChequeIssueRegister() {
             </span>
           </p>
         </div>
+
+        {/* Issue Cheque Modal */}
+        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Issue New Cheque</DialogTitle>
+              <DialogDescription>Enter the details of the new cheque to be issued.</DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="payeeName" className="text-right">
+                  Payee Name
+                </Label>
+                <Input
+                  id="payeeName"
+                  value={newCheque.payeeName || ""}
+                  onChange={(e) => handleInputChange("payeeName", e.target.value)}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="purpose" className="text-right">
+                  Purpose
+                </Label>
+                <Input
+                  id="purpose"
+                  value={newCheque.purpose || ""}
+                  onChange={(e) => handleInputChange("purpose", e.target.value)}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="amount" className="text-right">
+                  Amount (₹)
+                </Label>
+                <Input
+                  id="amount"
+                  type="number"
+                  value={newCheque.amount || ""}
+                  onChange={(e) => handleInputChange("amount", e.target.value)}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="date" className="text-right">
+                  Date
+                </Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "col-span-3 justify-start text-left font-normal",
+                        !newCheque.date && "text-muted-foreground",
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {newCheque.date ? format(newCheque.date, "PPP") : <span>Pick a date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={newCheque.date}
+                      onSelect={(date) => handleInputChange("date", date)}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="bankAccount" className="text-right">
+                  Bank Account
+                </Label>
+                <Select
+                  value={newCheque.bankAccount}
+                  onValueChange={(value) => handleInputChange("bankAccount", value)}
+                >
+                  <SelectTrigger className="col-span-3">
+                    <SelectValue placeholder="Select bank account" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="SBI - 10023456789">SBI - 10023456789</SelectItem>
+                    <SelectItem value="PNB - 20034567890">PNB - 20034567890</SelectItem>
+                    <SelectItem value="BOB - 30045678901">BOB - 30045678901</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="status" className="text-right">
+                  Status
+                </Label>
+                <Select value={newCheque.status} onValueChange={(value) => handleInputChange("status", value)}>
+                  <SelectTrigger className="col-span-3">
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pending">Pending</SelectItem>
+                    <SelectItem value="cleared">Cleared</SelectItem>
+                    <SelectItem value="cancelled">Cancelled</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit" onClick={handleSubmit}>
+                Issue Cheque
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </CardContent>
     </Card>
   )

@@ -7,7 +7,20 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Download, Plus, Search } from "lucide-react"
+import { Download, Plus, Search, CalendarIcon } from "lucide-react"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Calendar } from "@/components/ui/calendar"
+import { format } from "date-fns"
+import { cn } from "@/lib/utils"
 
 interface DemandEntry {
   id: string
@@ -71,6 +84,71 @@ export default function DemandRegister() {
 
   const [filterType, setFilterType] = useState<string>("all")
   const [filterStatus, setFilterStatus] = useState<string>("all")
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  // Form state
+  const [newDemand, setNewDemand] = useState<Partial<DemandEntry>>({
+    demandDate: new Date(),
+    dueDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),
+    collectedAmount: 0,
+    status: "pending",
+  })
+
+  const handleInputChange = (field: string, value: any) => {
+    setNewDemand({
+      ...newDemand,
+      [field]: value,
+    })
+
+    // Auto-calculate status based on amount and collected amount
+    if (field === "amount" || field === "collectedAmount") {
+      const amount = field === "amount" ? Number(value) : Number(newDemand.amount) || 0
+      const collected = field === "collectedAmount" ? Number(value) : Number(newDemand.collectedAmount) || 0
+
+      let status: "paid" | "partial" | "pending" | "overdue" = "pending"
+
+      if (collected >= amount && amount > 0) {
+        status = "paid"
+      } else if (collected > 0 && collected < amount) {
+        status = "partial"
+      } else if (newDemand.dueDate && newDemand.dueDate < new Date() && collected < amount) {
+        status = "overdue"
+      }
+
+      setNewDemand((prev) => ({
+        ...prev,
+        status,
+      }))
+    }
+  }
+
+  const handleSubmit = () => {
+    // Generate a new ID and demand number
+    const newId = (demands.length + 1).toString()
+    const newDemandNo = `DEM-${(demands.length + 1).toString().padStart(3, "0")}`
+
+    const newDemandEntry: DemandEntry = {
+      id: newId,
+      demandNo: newDemandNo,
+      demandDate: newDemand.demandDate || new Date(),
+      partyName: newDemand.partyName || "",
+      demandType: newDemand.demandType || "",
+      amount: Number(newDemand.amount) || 0,
+      dueDate: newDemand.dueDate || new Date(new Date().setMonth(new Date().getMonth() + 1)),
+      collectedAmount: Number(newDemand.collectedAmount) || 0,
+      status: (newDemand.status as "paid" | "partial" | "pending" | "overdue") || "pending",
+    }
+
+    setDemands([...demands, newDemandEntry])
+    setIsModalOpen(false)
+    // Reset form
+    setNewDemand({
+      demandDate: new Date(),
+      dueDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),
+      collectedAmount: 0,
+      status: "pending",
+    })
+  }
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -138,7 +216,7 @@ export default function DemandRegister() {
               <Download className="mr-2 h-4 w-4" />
               Export
             </Button>
-            <Button>
+            <Button onClick={() => setIsModalOpen(true)}>
               <Plus className="mr-2 h-4 w-4" />
               Raise Demand
             </Button>
@@ -240,6 +318,137 @@ export default function DemandRegister() {
             </p>
           </div>
         </div>
+
+        {/* Raise Demand Modal */}
+        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Raise New Demand</DialogTitle>
+              <DialogDescription>Enter the details of the new demand to be raised.</DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="partyName" className="text-right">
+                  Party Name
+                </Label>
+                <Input
+                  id="partyName"
+                  value={newDemand.partyName || ""}
+                  onChange={(e) => handleInputChange("partyName", e.target.value)}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="demandType" className="text-right">
+                  Demand Type
+                </Label>
+                <Select value={newDemand.demandType} onValueChange={(value) => handleInputChange("demandType", value)}>
+                  <SelectTrigger className="col-span-3">
+                    <SelectValue placeholder="Select type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Property Tax">Property Tax</SelectItem>
+                    <SelectItem value="Water Charges">Water Charges</SelectItem>
+                    <SelectItem value="Trade License Fee">Trade License Fee</SelectItem>
+                    <SelectItem value="Rent">Rent</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="amount" className="text-right">
+                  Amount (₹)
+                </Label>
+                <Input
+                  id="amount"
+                  type="number"
+                  value={newDemand.amount || ""}
+                  onChange={(e) => handleInputChange("amount", e.target.value)}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="demandDate" className="text-right">
+                  Demand Date
+                </Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "col-span-3 justify-start text-left font-normal",
+                        !newDemand.demandDate && "text-muted-foreground",
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {newDemand.demandDate ? format(newDemand.demandDate, "PPP") : <span>Pick a date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={newDemand.demandDate}
+                      onSelect={(date) => handleInputChange("demandDate", date)}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="dueDate" className="text-right">
+                  Due Date
+                </Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "col-span-3 justify-start text-left font-normal",
+                        !newDemand.dueDate && "text-muted-foreground",
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {newDemand.dueDate ? format(newDemand.dueDate, "PPP") : <span>Pick a date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={newDemand.dueDate}
+                      onSelect={(date) => handleInputChange("dueDate", date)}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="collectedAmount" className="text-right">
+                  Collected (₹)
+                </Label>
+                <Input
+                  id="collectedAmount"
+                  type="number"
+                  value={newDemand.collectedAmount || ""}
+                  onChange={(e) => handleInputChange("collectedAmount", e.target.value)}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="status" className="text-right">
+                  Status
+                </Label>
+                <div className="col-span-3 flex items-center">
+                  {getStatusBadge(newDemand.status || "pending")}
+                  <span className="ml-2 text-sm text-muted-foreground">(Auto-calculated)</span>
+                </div>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit" onClick={handleSubmit}>
+                Raise Demand
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </CardContent>
     </Card>
   )
