@@ -4,8 +4,8 @@ import SummaryStatementOfDepositAdjusted from "./summary-statement-of-deposit-ad
 import ChequeIssueRegister from "./cheque-issue-register"
 import DepositRegister from "./deposit-register"
 import DemandRegister from "./demand-register"
-import BillsOfMunicipalDues from "./bills-of-municipal-dues"
-import DocumentControlRegister from "./document-control-register"
+import BillsOfMunicipalDues from "../bills/bills-of-municipal-dues"
+import DocumentControlRegister from "../document/document-control-register"
 
 export default function Home() {
   return (
