@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div className="container ">
       <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center md:text-left">
-        Function wise ledger
+        Function wise Subsidiary  Ledger
       </h1>
 
       <Tabs defaultValue="income">

@@ -15,7 +15,7 @@ export default function Home() {
   return (
     <div className="container  md:px-8">
       <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center md:text-left">
-        Government Financial Registers
+       Financial Registers
       </h1>
 
       <Tabs defaultValue="immovable">
