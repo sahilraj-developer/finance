@@ -41,6 +41,8 @@ import Register from "./pages/register/page";
 import Summary from "./pages/summaries/page";
 import FunctionWise from "./pages/function-wise-subsidary/page";
 import DataRegister from "./pages/data-register/page";
+import Bills from "./pages/bills/bills-of-municipal-dues";
+import Document from "./pages/document/document-control-register";
 
 
 export default function App() {
@@ -82,6 +84,8 @@ export default function App() {
             <Route path="/summary" element={ <Summary />  }  />
             <Route path="/function-wise-subsidary" element={ <FunctionWise />  }  />
             <Route path="/data-register" element={ <DataRegister />  }  />
+            <Route path="/bills" element={ <Bills />  }  />
+            <Route path="/document" element={ <Document />  }  />
            
 
             

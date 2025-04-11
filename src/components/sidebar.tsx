@@ -113,6 +113,16 @@ const navItems: NavItem[] = [
         icon: <RefreshCw className="h-5 w-5" />,
       },
       {
+        title: "Bills",
+        href: "/bills",
+        icon: <RefreshCw className="h-5 w-5" />,
+      },
+      {
+        title: "Document",
+        href: "/document",
+        icon: <RefreshCw className="h-5 w-5" />,
+      },
+      {
         title: "Summary",
         href: "/summary",
         icon: <RefreshCw className="h-5 w-5" />,
