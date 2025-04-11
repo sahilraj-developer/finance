@@ -108,6 +108,11 @@ const navItems: NavItem[] = [
         icon: <RefreshCw className="h-5 w-5" />,
       },
       {
+        title: "Summary",
+        href: "/summary",
+        icon: <RefreshCw className="h-5 w-5" />,
+      },
+      {
         title: "Function wise ",
         href: "/function-wise-subsidary",
         icon: <ReceiptText className="h-5 w-5" />,
