@@ -87,8 +87,6 @@ const {
 export default function CashBook() {
 
 
-
-
   const [loading,setLoading] = useState(true);
 
   const [cashbookPaymentData,setCashbookPaymentData] = useState([]);
