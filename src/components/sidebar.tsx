@@ -144,7 +144,7 @@ const navItems: NavItem[] = [
       },
       {
         title: "BalanceSheet-1",
-        href: "/balance-sheet-1",
+        href: "/balance-sheet",
         icon: <ReceiptText className="h-5 w-5" />,
       },
       {

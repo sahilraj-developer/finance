@@ -93,7 +93,7 @@ export default function App() {
             <Route path="/document" element={ <Document />  }  />
             <Route path="/schdule-i" element={ <ScheduleI />  }  />
             <Route path="/schdule-b" element={ <ScheduleB />  }  />
-            <Route path="/balance-sheet-1" element={ <BalanceSheet/>  }  />
+            <Route path="/balance-sheet" element={ <BalanceSheet/>  }  />
             <Route path="/income-expenditure" element={ <IncomeExpenditureAccount/>  }  />
             <Route path="/trial-balance" element={ <TrialBalanceReport/>  }  />
            
