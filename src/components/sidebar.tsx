@@ -132,6 +132,31 @@ const navItems: NavItem[] = [
         href: "/function-wise-subsidary",
         icon: <ReceiptText className="h-5 w-5" />,
       },
+      {
+        title: "Schedule-1",
+        href: "/schdule-i",
+        icon: <ReceiptText className="h-5 w-5" />,
+      },
+      {
+        title: "Schedule-B",
+        href: "/schdule-b",
+        icon: <ReceiptText className="h-5 w-5" />,
+      },
+      {
+        title: "BalanceSheet-1",
+        href: "/balance-sheet-1",
+        icon: <ReceiptText className="h-5 w-5" />,
+      },
+      {
+        title: "IncomeAndExpenditure",
+        href: "/income-expenditure",
+        icon: <ReceiptText className="h-5 w-5" />,
+      },
+      {
+        title: "TrialBalance",
+        href: "/trial-balance",
+        icon: <ReceiptText className="h-5 w-5" />,
+      },
     ],
   },
   {
