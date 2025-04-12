@@ -43,6 +43,11 @@ import FunctionWise from "./pages/function-wise-subsidary/page";
 import DataRegister from "./pages/data-register/page";
 import Bills from "./pages/bills/bills-of-municipal-dues";
 import Document from "./pages/document/document-control-register";
+import ScheduleI from "./pages/schedular/scheduleI/ScheduleI";
+import ScheduleB from "./pages/schedular/scheduleB/ScheduleB";
+import BalanceSheet from "./pages/balancesheet1/balanceSheet1";
+import IncomeExpenditureAccount from "./pages/incomeAndExp1/incomeAndExp1";
+import TrialBalanceReport from "./pages/trialBalance/trialBalance1/trialBalance1";
 
 
 export default function App() {
@@ -86,6 +91,11 @@ export default function App() {
             <Route path="/data-register" element={ <DataRegister />  }  />
             <Route path="/bills" element={ <Bills />  }  />
             <Route path="/document" element={ <Document />  }  />
+            <Route path="/schdule-i" element={ <ScheduleI />  }  />
+            <Route path="/schdule-b" element={ <ScheduleB />  }  />
+            <Route path="/balance-sheet-1" element={ <BalanceSheet/>  }  />
+            <Route path="/income-expenditure" element={ <IncomeExpenditureAccount/>  }  />
+            <Route path="/trial-balance" element={ <TrialBalanceReport/>  }  />
            
 
             
