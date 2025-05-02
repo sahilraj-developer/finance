@@ -200,7 +200,7 @@ export default function DocumentControlRegister() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Document Control Register</CardTitle>
+        <CardTitle>Document Control Register (Gen 29)</CardTitle>
         <CardDescription>Stock account of receipts, checkbooks and other controlled documents</CardDescription>
       </CardHeader>
       <CardContent>

@@ -12,19 +12,20 @@ export default function Home() {
   return (
     <div className="container  md:px-8">
       <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center md:text-left">
-        Government Financial Registers
+        Financial Summary
       </h1>
 
       <Tabs defaultValue="immovable">
         <div className="w-full overflow-x-auto">
           <TabsList className="w-max min-w-full flex flex-nowrap md:flex-wrap gap-2 mb-6">
-            <TabsTrigger value="immovable">Bills Raised Summary (gen - 30)</TabsTrigger>
-            <TabsTrigger value="movable">Daily Collection Summary (gen - 31)</TabsTrigger>
-            <TabsTrigger value="land">Deposits Adjusted Summary (gen -32)</TabsTrigger>
+            <TabsTrigger value="immovable">Bills Raised Summary (gen - 22)</TabsTrigger>
+            <TabsTrigger value="movable">Daily Collection Summary (gen - 12)</TabsTrigger>
+            <TabsTrigger value="land">Deposits Adjusted Summary (gen -19)</TabsTrigger>
             <TabsTrigger value="asset">Fees Summary (gen -24)</TabsTrigger>
-            <TabsTrigger value="lighting">Outstanding Liability Summary (gen -28)</TabsTrigger>
             <TabsTrigger value="bills">Refunds Remissions Summary (gen -26)</TabsTrigger>
             <TabsTrigger value="advance">Write Offs Summary (gen -27)</TabsTrigger>
+            <TabsTrigger value="lighting">Outstanding Liability Summary (gen -28)</TabsTrigger>
+
             {/* <TabsTrigger value="permanent">Permanent Advances (gen -17)</TabsTrigger>
             <TabsTrigger value="fees">Fees Register (gen -23)</TabsTrigger>
             <TabsTrigger value="refunds">Refunds & Write-offs (gen -25)</TabsTrigger> */}
